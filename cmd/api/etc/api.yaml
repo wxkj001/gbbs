@@ -1,8 +1,14 @@
 Name: api
 Host: 0.0.0.0
 Port: 8888
+Debug: true
 Static:
-Model: ./etc/rbac_model.conf
+Rbac: C:\\Users\\Aerisen\\GolandProjects\\bbs\\cmd\\api\\etc\\rbac_model.conf
+Pass: CAC40BFBC343A8BB7941B7270F5E3BF1 #密码盐值
+User:
+  VisitorUUID: 97C65296-91A2-D941-7ADC-CBC5F3EB763B #游客组uuid
+  OrdinaryUUID: 9C745BFC-94ED-ED54-3750-2F085421B828 #普通组uuid
+  AdminUUID: 48BFD011-77AA-2164-78F1-A86754712F40 #管理员组uuid
 DB:
   #  支持mysql，pgsql，sqlite
   type: mysql

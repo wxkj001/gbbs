@@ -1,0 +1,16 @@
+syntax = "v1"
+
+type SignupRequest {
+    NickName string `json:"nick_name"`
+    Email string `json:"email"`
+    Phone string `json:"phone"`
+    Password string `json:"password"`
+}
+
+@server(
+    group: signup
+)
+service user-api {
+    @handler UserSignupHandler
+    post /signup(SignupRequest)
+}

@@ -62,13 +62,16 @@ func NewServer(c config.Config) *rest.Server {
 }
 func NewCasbin(c config.Config) (*casbin.Enforcer, error) {
 	a, _ := entadapter.NewAdapter(c.DB.Type, c.DB.Source)
-	return casbin.NewEnforcer(c.Model, a)
+	return casbin.NewEnforcer(c.Rbac, a)
 }
 func NewDB(c config.Config) (*ent.Client, func(), error) {
 	var db *ent.Client
 	var err error
 	logx.Debugf("db:%s", c.DB.Source)
 	db, err = ent.Open(c.DB.Type, c.DB.Source)
+	if c.Debug {
+		db = db.Debug()
+	}
 	if err != nil {
 		logx.Errorf("failed opening connection to mysql: %v", err)
 		return nil, func() {

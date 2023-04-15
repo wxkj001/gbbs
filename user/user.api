@@ -1,12 +1,20 @@
-type Request {
-	Name string `path:"name,options=you|me"`
-}
+import (
+	"apis/signup.api"
+)
+type (
+	LoginRequest {
+		Name     string `json:"name"`
+		Password string `json:"password"`
+	}
+	LoginResponse {
+		Token string `json:"token"`
+	}
+)
 
-type Response {
-	Message string `json:"message"`
-}
-
+@server(
+	group: login
+)
 service user-api {
-	@handler UserHandler
-	get /from/:name(Request) returns (Response)
+	@handler UserLoginHandler
+	post /signin(LoginRequest) returns (LoginResponse)
 }
