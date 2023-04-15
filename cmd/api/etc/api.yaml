@@ -1,0 +1,13 @@
+Name: api
+Host: 0.0.0.0
+Port: 8888
+Static:
+Model: ./etc/rbac_model.conf
+DB:
+  #  支持mysql，pgsql，sqlite
+  type: mysql
+  source: root:root@tcp(127.0.0.1:3306)/bbs?parseTime=True
+Auth:
+  AccessSecret: CAC40BFBC343A8BB7941B7270F5E3BF1
+  AccessExpire: 3000
+

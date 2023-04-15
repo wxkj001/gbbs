@@ -1,0 +1,8 @@
+.idea
+.vscode
+ent/*
+!ent/generate.go
+!ent/schema
+!ent/.gitignore
+wire_gen.go
+cmd/api/etc/dev.yaml
