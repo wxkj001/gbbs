@@ -2,7 +2,9 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"github.com/google/uuid"
 	"time"
 )
@@ -15,10 +17,10 @@ type User struct {
 // Fields of the User.
 func (User) Fields() []ent.Field {
 	return []ent.Field{
-		field.UUID("user_uuid", uuid.UUID{}).Default(uuid.New),
+		field.UUID("user_uuid", uuid.UUID{}).Default(uuid.New).Unique(),
 		field.UUID("group_uuid", uuid.UUID{}), //用户组uuid
 		field.Float("integral").Default(0),    //积分
-		field.String("password"),
+		field.String("password").Sensitive(),
 		field.String("nick_name"),
 		field.String("email"),
 		field.String("phone"),
@@ -31,5 +33,15 @@ func (User) Fields() []ent.Field {
 
 // Edges of the User.
 func (User) Edges() []ent.Edge {
-	return nil
+	return []ent.Edge{
+		edge.To("topic", Topic.Type),
+	}
+}
+func (User) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("user_uuid").Unique(),
+		index.Fields("nick_name"),
+		index.Fields("email"),
+		index.Fields("phone"),
+	}
 }

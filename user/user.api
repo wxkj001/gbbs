@@ -1,5 +1,6 @@
 import (
 	"apis/signup.api"
+	"apis/user.api"
 )
 type (
 	LoginRequest {

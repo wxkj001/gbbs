@@ -16,3 +16,13 @@ type SignupRequest struct {
 	Phone    string `json:"phone"`
 	Password string `json:"password"`
 }
+
+type GetUserResponse struct {
+	NickName string `json:"nick_name"`
+	Email    string `json:"email"`
+	Phone    string `json:"phone"`
+}
+
+type GetUserRequest struct {
+	UserId string `path:"userId"`
+}

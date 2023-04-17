@@ -7,6 +7,8 @@ import (
 	"bbs/user/internal/svc"
 	"bbs/user/internal/types"
 	"context"
+	"github.com/golang-jwt/jwt/v4"
+	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -36,5 +38,16 @@ func (l *UserLoginLogic) UserLogin(req *types.LoginRequest) (resp *types.LoginRe
 	if !u.PassVerify(req.Password, first.Password) {
 		return nil, errorx.NewCodeError(4005, "password not")
 	}
-	return &types.LoginResponse{Token: first.UserUUID.String()}, nil
+	claims := make(jwt.MapClaims)
+	claims["exp"] = l.svcCtx.Config.Auth.AccessExpire + time.Now().Unix()
+	claims["iat"] = l.svcCtx.Config.Auth.AccessExpire
+	claims["userUUId"] = first.UserUUID
+	token := jwt.New(jwt.SigningMethodHS256)
+	token.Claims = claims
+	to, err := token.SignedString([]byte(l.svcCtx.Config.Auth.AccessSecret))
+	if err != nil {
+		return nil, err
+	}
+	l.svcCtx.Ent.User.QueryTopics(first).FirstX(l.ctx)
+	return &types.LoginResponse{Token: to}, nil
 }

@@ -1,0 +1,20 @@
+syntax = "v1"
+
+
+type GetUserResponse {
+    NickName string `json:"nick_name"`
+    Email string `json:"email"`
+    Phone string `json:"phone"`
+}
+type GetUserRequest {
+    userId string `path:"userId"`
+}
+
+@server(
+    jwt: Auth
+    group: user
+)
+service user-api {
+    @handler GetUserHandler
+    get /users/id/:userId(GetUserRequest) returns (GetUserResponse)
+}

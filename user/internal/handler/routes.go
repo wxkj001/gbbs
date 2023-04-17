@@ -6,6 +6,7 @@ import (
 
 	login "bbs/user/internal/handler/login"
 	signup "bbs/user/internal/handler/signup"
+	user "bbs/user/internal/handler/user"
 	"bbs/user/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -30,5 +31,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: signup.UserSignupHandler(serverCtx),
 			},
 		},
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodGet,
+				Path:    "/users/id/:userId",
+				Handler: user.GetUserHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 }
