@@ -5,7 +5,6 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	"github.com/google/uuid"
 	"time"
 )
 
@@ -17,16 +16,15 @@ type User struct {
 // Fields of the User.
 func (User) Fields() []ent.Field {
 	return []ent.Field{
-		field.UUID("user_uuid", uuid.UUID{}).Default(uuid.New).Unique(),
-		field.UUID("group_uuid", uuid.UUID{}), //用户组uuid
-		field.Float("integral").Default(0),    //积分
+		field.Int("group_id"),              //用户组uuid
+		field.Float("integral").Default(0), //积分
 		field.String("password").Sensitive(),
 		field.String("nick_name"),
 		field.String("email"),
 		field.String("phone"),
 		field.String("avatar").Default("/1"),
-		field.Enum("status").Values("on", "off").Default("on"), //用户状态
-		field.Int64("reg_time").Default(time.Now().Unix()),     //注册时间
+		field.Enum("status").Values("on", "off").Default("on"),         //用户状态
+		field.Int64("reg_time").Default(time.Now().Unix()).Comment(""), //注册时间
 	}
 
 }
@@ -34,12 +32,14 @@ func (User) Fields() []ent.Field {
 // Edges of the User.
 func (User) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("topic", Topic.Type),
+		//edge.To("topics", Topic.Type).Annotations(entsql.Annotation{OnDelete: entsql.Cascade}),
+		edge.To("topics", Topic.Type),
+		//edge.From("topics", Topic.Type).Ref("users").Unique().Required().Field("user_uuid"),
 	}
 }
 func (User) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("user_uuid").Unique(),
+		index.Fields("id").Unique(),
 		index.Fields("nick_name"),
 		index.Fields("email"),
 		index.Fields("phone"),

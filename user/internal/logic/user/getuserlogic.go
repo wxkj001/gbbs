@@ -2,11 +2,9 @@ package user
 
 import (
 	"bbs/ent/user"
-	"context"
-	"github.com/google/uuid"
-
 	"bbs/user/internal/svc"
 	"bbs/user/internal/types"
+	"context"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -26,7 +24,7 @@ func NewGetUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUserLo
 }
 
 func (l *GetUserLogic) GetUser(GetUser *types.GetUserRequest) (resp *types.GetUserResponse, err error) {
-	user := l.svcCtx.Ent.User.Query().Where(user.UserUUID(uuid.MustParse(GetUser.UserId))).FirstX(l.ctx)
+	user := l.svcCtx.Ent.User.Query().Where(user.ID(1)).FirstX(l.ctx)
 	return &types.GetUserResponse{
 		NickName: user.NickName,
 		Email:    user.Email,

@@ -3,11 +3,9 @@ package signup
 import (
 	"bbs/common/errorx"
 	"bbs/common/util"
-	"context"
-	"github.com/google/uuid"
-
 	"bbs/user/internal/svc"
 	"bbs/user/internal/types"
+	"context"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -29,7 +27,7 @@ func NewUserSignupLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserSi
 func (l *UserSignupLogic) UserSignup(req *types.SignupRequest) error {
 	u := util.Util{Config: l.svcCtx.Config}
 	us, err := l.svcCtx.Ent.User.Create().
-		SetGroupUUID(uuid.MustParse(l.svcCtx.Config.User.OrdinaryUUID)).
+		SetGroupID(1).
 		SetNickName(req.NickName).
 		SetEmail(req.Email).
 		SetPhone(req.Phone).

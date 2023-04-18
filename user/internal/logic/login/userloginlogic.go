@@ -3,6 +3,7 @@ package login
 import (
 	"bbs/common/errorx"
 	"bbs/common/util"
+	"bbs/ent"
 	"bbs/ent/user"
 	"bbs/user/internal/svc"
 	"bbs/user/internal/types"
@@ -41,13 +42,17 @@ func (l *UserLoginLogic) UserLogin(req *types.LoginRequest) (resp *types.LoginRe
 	claims := make(jwt.MapClaims)
 	claims["exp"] = l.svcCtx.Config.Auth.AccessExpire + time.Now().Unix()
 	claims["iat"] = l.svcCtx.Config.Auth.AccessExpire
-	claims["userUUId"] = first.UserUUID
+	claims["userUUId"] = first.ID
 	token := jwt.New(jwt.SigningMethodHS256)
 	token.Claims = claims
 	to, err := token.SignedString([]byte(l.svcCtx.Config.Auth.AccessSecret))
 	if err != nil {
 		return nil, err
 	}
-	l.svcCtx.Ent.User.QueryTopics(first).FirstX(l.ctx)
+	//l.svcCtx.Ent.Topic.QueryUsers()
+	ll := l.svcCtx.Ent.User.QueryTopics(first).WithUsers(func(query *ent.UserQuery) {
+		query.Where(user.IDEQ(first.ID))
+	}).AllX(l.ctx)
+	l.Infof("%+v", ll)
 	return &types.LoginResponse{Token: to}, nil
 }
